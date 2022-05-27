@@ -1,7 +1,7 @@
 import logging
 import ssl
 
-from aiohttp import web
+import cherrypy
 from aiogram import executor, types
 from handlers import login
 
@@ -111,7 +111,19 @@ async def on_startup(_):
 # if __name__ == '__main__':
 #     executor.start_polling(dp, skip_updates=False, on_startup=on_startup)
 
-
+class WebhookServer(object):
+    @cherrypy.expose
+    def index(self):
+        if 'content-length' in cherrypy.request.headers and \
+           'content-type' in cherrypy.request.headers and \
+           cherrypy.request.headers['content-type'] == 'application/json':
+            length = int(cherrypy.request.headers['content-length'])
+            json_string = cherrypy.request.body.read(length).decode("utf-8")
+            update = types.Update.de_json(json_string)
+            bot.process_new_updates([update])
+            return ''
+        else:
+            raise cherrypy.HTTPError(403)
 
 
 
@@ -130,41 +142,24 @@ WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/{}/".format(TOKEN_API)
 
 
-app = web.Application()
+bot.remove_webhook()
 
+# Set webhook
+bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
+                certificate=open(WEBHOOK_SSL_CERT, 'r'))
 
-# Process webhook calls
-async def handle(request):
-    # await on_startup()
-    if request.match_info.get('token') == bot.token:
-        request_body_dict = await request.json()
-        update = types.Update.de_json(request_body_dict)
-        bot.process_new_updates([update])
-        return web.Response()
-    else:
-        return web.Response(status=403)
+# Disable CherryPy requests log
+access_log = cherrypy.log.access_log
+for handler in tuple(access_log.handlers):
+    access_log.removeHandler(handler)
 
+# Start cherrypy server
+cherrypy.config.update({
+    'server.socket_host'    : WEBHOOK_LISTEN,
+    'server.socket_port'    : WEBHOOK_PORT,
+    'server.ssl_module'     : 'builtin',
+    'server.ssl_certificate': WEBHOOK_SSL_CERT,
+    'server.ssl_private_key': WEBHOOK_SSL_PRIV
+})
 
-app.router.add_post('/{token}/', handle)
-
-
-
-# Remove webhook, it fails sometimes the set if there is a previous webhook
-# bot.remove_webhook()
-# bot.delete_webhook()
-#
-# # Set webhook
-# bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
-#                 certificate=open(WEBHOOK_SSL_CERT, 'r'))
-
-# Build ssl context
-context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_1)
-context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
-
-# Start aiohttp server
-web.run_app(
-    app,
-    host=WEBHOOK_LISTEN,
-    port=WEBHOOK_PORT,
-    ssl_context=context,
-)
+cherrypy.quickstart(WebhookServer(), WEBHOOK_URL_PATH, {'/': {}})
