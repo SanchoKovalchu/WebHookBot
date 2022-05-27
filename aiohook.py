@@ -9,20 +9,20 @@ from aiogram.utils.executor import start_webhook
 
 API_TOKEN = '5302840148:AAGtGfjfQZWbwRn0mqPrv_rEqRhK9XEiarg'
 
-WEBHOOK_HOST = '130.211.226.27'
+# WEBHOOK_HOST = 'https://130.211.226.27:8443'
+WEBHOOK_HOST = 'https://130.211.226.27'
 
-# WEBHOOK_PATH = '/8443'
 WEBHOOK_PATH = ''
 
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
-  # webserver settings
-
 WEBAPP_HOST = '0.0.0.0'  # or ip
 # WEBAPP_HOST = '130.211.226.27'  # or ip
-
 # WEBAPP_PORT = '8443'
 WEBAPP_PORT = '0'
+
+
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -40,8 +40,8 @@ async def echo(message: types.Message):
     return SendMessage(message.chat.id, message.text)
 
 
-# async def on_startup(dp):
-#     await bot.set_webhook(WEBHOOK_URL)
+async def on_startup(dp):
+    await bot.set_webhook(WEBHOOK_URL)
     # insert code here to run it after start
 
 
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     start_webhook(
         dispatcher=dp,
         webhook_path=WEBHOOK_PATH,
-        # on_startup=on_startup,
+        on_startup=on_startup,
         on_shutdown=on_shutdown,
         skip_updates=True,
         host=WEBAPP_HOST,
