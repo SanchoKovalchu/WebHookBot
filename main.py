@@ -135,6 +135,7 @@ app = web.Application()
 
 # Process webhook calls
 async def handle(request):
+    # await on_startup()
     if request.match_info.get('token') == bot.token:
         request_body_dict = await request.json()
         update = types.Update.de_json(request_body_dict)
@@ -144,7 +145,7 @@ async def handle(request):
         return web.Response(status=403)
 
 
-app.router.add_post('/{token}/', handle, on_startup=on_startup)
+app.router.add_post('/{token}/', handle)
 
 
 
