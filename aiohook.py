@@ -13,7 +13,7 @@ WEBHOOK_HOST = '130.211.226.27'
 # WEBHOOK_HOST = '130.211.226.27'
 # WEBHOOK_HOST = '130.211.226.27'
 
-WEBHOOK_PATH = '/8443'
+WEBHOOK_PATH = ''
 
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
@@ -42,6 +42,7 @@ async def echo(message: types.Message):
 
 
 async def on_startup(dp):
+    await bot.send_message(509032071, "Ласкаво прошу до StudyBot!")
     await bot.set_webhook(WEBHOOK_URL)
     # insert code here to run it after start
 
