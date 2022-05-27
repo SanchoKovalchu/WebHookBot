@@ -10,7 +10,7 @@ from aiogram.utils.executor import start_webhook
 API_TOKEN = '5302840148:AAGtGfjfQZWbwRn0mqPrv_rEqRhK9XEiarg'
 
 # WEBHOOK_HOST = 'https://130.211.226.27:8443'
-WEBHOOK_HOST = 'https://130.211.226.27'
+WEBHOOK_HOST = '130.211.226.27'
 # WEBHOOK_HOST = '130.211.226.27'
 
 WEBHOOK_PATH = ''
@@ -20,7 +20,8 @@ WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 WEBAPP_HOST = '0.0.0.0'  # or ip
 # WEBAPP_HOST = '130.211.226.27'  # or ip
 # WEBAPP_PORT = '8443'
-WEBAPP_PORT = 8443
+WEBAPP_PORT = 0
+# WEBAPP_PORT = 8443
 
 
 
@@ -32,10 +33,11 @@ dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
 
-@dp.message_handler()
+@dp.message_handler(commands="start")
 async def echo(message: types.Message):
     # Regular request
     await bot.send_message(message.chat.id, message.text)
+    await message.answer("Ласкаво прошу до StudyBot!")
 
     # or reply INTO webhook
     # return SendMessage(message.chat.id, message.text)
