@@ -19,7 +19,7 @@ WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 WEBAPP_HOST = '0.0.0.0'  # or ip
 
-WEBAPP_PORT = 8443
+WEBAPP_PORT = '8443'
 
 logging.basicConfig(level=logging.INFO)
 
