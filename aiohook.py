@@ -9,8 +9,8 @@ from aiogram.utils.executor import start_webhook
 
 API_TOKEN = '5302840148:AAGtGfjfQZWbwRn0mqPrv_rEqRhK9XEiarg'
 
-# WEBHOOK_HOST = 'https://130.211.226.27:8443'
-WEBHOOK_HOST = '130.211.226.27'
+WEBHOOK_HOST = '130.211.226.27:8443'
+# WEBHOOK_HOST = '130.211.226.27'
 # WEBHOOK_HOST = '130.211.226.27'
 
 WEBHOOK_PATH = ''
