@@ -1,0 +1,5 @@
+aiogram==2.20
+asyncio==3.4.3
+aioschedule==0.5.2
+PyMySQL==1.0.2
+aoihttp==3.8.1
