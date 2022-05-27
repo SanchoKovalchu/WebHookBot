@@ -3,15 +3,12 @@ import logging
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
-from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.executor import start_webhook
 
 
 API_TOKEN = '5302840148:AAGtGfjfQZWbwRn0mqPrv_rEqRhK9XEiarg'
 
 WEBHOOK_HOST = '130.211.226.27'
-# WEBHOOK_HOST = '130.211.226.27'
-# WEBHOOK_HOST = '130.211.226.27'
 
 WEBHOOK_PATH = ''
 
@@ -21,9 +18,6 @@ WEBAPP_HOST = '0.0.0.0'  # or ip
 # WEBAPP_HOST = '130.211.226.27'  # or ip
 WEBAPP_PORT = 8443
 
-
-
-
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=API_TOKEN)
@@ -31,18 +25,15 @@ dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
 
-@dp.message_handler(commands="start")
+@dp.message_handler()
 async def echo(message: types.Message):
     # Regular request
     await bot.send_message(message.chat.id, message.text)
     await message.answer("Ласкаво прошу до StudyBot!")
 
-    # or reply INTO webhook
-    # return SendMessage(message.chat.id, message.text)
 
 
 async def on_startup(dp):
-    await bot.send_message(509032071, "Ласкаво прошу до StudyBot!")
     await bot.set_webhook(WEBHOOK_URL)
     # insert code here to run it after start
 
@@ -70,5 +61,5 @@ if __name__ == '__main__':
         on_shutdown=on_shutdown,
         skip_updates=True,
         host=WEBAPP_HOST,
-        port=WEBAPP_PORT,
+        port=WEBAPP_PORT
     )
