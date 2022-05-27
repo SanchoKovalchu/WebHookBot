@@ -158,7 +158,7 @@ app.router.add_post('/{token}/', handle)
 #                 certificate=open(WEBHOOK_SSL_CERT, 'r'))
 
 # Build ssl context
-context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+context = ssl.SSLContext(ssl.TLSv1_2_METHOD)
 context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
 
 # Start aiohttp server
