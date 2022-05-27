@@ -1,5 +1,5 @@
 import logging
-import ssl
+import json
 
 import cherrypy
 from aiogram import executor, types
@@ -119,7 +119,8 @@ class WebhookServer(object):
            cherrypy.request.headers['content-type'] == 'application/json':
             length = int(cherrypy.request.headers['content-length'])
             json_string = cherrypy.request.body.read(length).decode("utf-8")
-            update = types.Update.de_json(json_string)
+            # update = types.Update.de_json(json_string)
+            update = json.loads(json_string)
             bot.process_new_updates([update])
             return ''
         else:
