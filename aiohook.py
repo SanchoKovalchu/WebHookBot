@@ -14,10 +14,9 @@ WEBHOOK_PATH = ''
 
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
-WEBAPP_HOST = '0.0.0.0'  # or ip
-# WEBAPP_HOST = '130.211.226.27'  # or ip
+WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = 8443
-
+WEBHOOK_SSL_CERT = '../url_cert.pem'  # Path to the ssl certificate
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=API_TOKEN)
@@ -34,7 +33,7 @@ async def echo(message: types.Message):
 
 
 async def on_startup(dp):
-    await bot.set_webhook(WEBHOOK_URL)
+    await bot.set_webhook(WEBHOOK_URL, certificate=open(WEBHOOK_SSL_CERT, 'r'))
     # insert code here to run it after start
 
 
