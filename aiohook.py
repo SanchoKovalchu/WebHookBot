@@ -10,7 +10,7 @@ API_TOKEN = '5302840148:AAGtGfjfQZWbwRn0mqPrv_rEqRhK9XEiarg'
 
 WEBHOOK_HOST = '130.211.226.27'
 
-WEBHOOK_PATH = ''
+WEBHOOK_PATH = '/WebHookBot'
 
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
@@ -34,7 +34,6 @@ async def echo(message: types.Message):
 
 async def on_startup(dp):
     await bot.set_webhook(WEBHOOK_URL)
-    print(bot.set_webhook(WEBHOOK_URL))
     print(WEBHOOK_URL)
     # insert code here to run it after start
 
@@ -62,5 +61,5 @@ if __name__ == '__main__':
         on_shutdown=on_shutdown,
         skip_updates=True,
         host=WEBAPP_HOST,
-        port=WEBAPP_PORT
+        port=WEBAPP_PORT,
     )
